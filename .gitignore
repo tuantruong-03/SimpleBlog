@@ -8,6 +8,8 @@ node_modules/
 # testing
 /coverage
 
+*/application.yml
+
 # production
 /build
 
