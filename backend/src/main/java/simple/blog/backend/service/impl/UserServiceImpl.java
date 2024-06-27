@@ -3,11 +3,12 @@ package simple.blog.backend.service.impl;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import simple.blog.backend.exception.UserIdNotFoundException;
+import simple.blog.backend.exception.AppException;
 import simple.blog.backend.model.User;
 import simple.blog.backend.repository.UserRepository;
 import simple.blog.backend.service.UserService;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
     public User findUserByUserId(Integer userId) {
         User user = userRepository.findByUserId(userId);
         if (user == null) {
-            throw new UserIdNotFoundException("User not found with id: " + userId);
+            throw new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND);
         }
         return user;
     }
