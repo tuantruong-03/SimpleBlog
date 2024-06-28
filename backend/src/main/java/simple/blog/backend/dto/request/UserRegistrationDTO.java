@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class UserRegistrationDTO {
     
     @NotBlank(message =  "Username must be not blank!")
