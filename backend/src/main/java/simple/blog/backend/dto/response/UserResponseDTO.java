@@ -2,8 +2,7 @@ package simple.blog.backend.dto.response;
 
 import java.util.Set;
 
-
-import lombok.Data;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import simple.blog.backend.model.Role;

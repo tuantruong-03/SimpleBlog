@@ -16,8 +16,11 @@ import simple.blog.backend.dto.response.ResponseDTO;
 public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ResponseDTO> handleUnwantedException(Exception e) {
-		ResponseDTO resp = ResponseDTO.builder().timestamp(LocalDateTime.now()).message(e.getMessage())
-				.statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()).build();
+		ResponseDTO resp = ResponseDTO.builder()
+				.timestamp(LocalDateTime.now())
+				.message(e.getMessage())
+				.statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+				.build();
 
 		return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -25,8 +28,11 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AppException.class)
 	public ResponseEntity<ResponseDTO> handleAppException(AppException e) {
 		HttpStatus httpStatus = e.getHttpStatus();
-		ResponseDTO resp = ResponseDTO.builder().timestamp(LocalDateTime.now()).message(e.getMessage())
-				.statusCode(httpStatus.value()).build();
+		ResponseDTO resp = ResponseDTO.builder()
+				.timestamp(LocalDateTime.now())
+				.message(e.getMessage())
+				.statusCode(httpStatus.value())
+				.build();
 
 		return new ResponseEntity<>(resp, httpStatus);
 	}
@@ -45,7 +51,9 @@ public class GlobalExceptionHandler {
 
 		System.out.println(message);
 
-		ResponseDTO resp = ResponseDTO.builder().timestamp(LocalDateTime.now()).message(message)
+		ResponseDTO resp = ResponseDTO.builder()
+				.timestamp(LocalDateTime.now())
+				.message(message)
 				.statusCode(HttpStatus.BAD_REQUEST.value()).build();
 
 		return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
