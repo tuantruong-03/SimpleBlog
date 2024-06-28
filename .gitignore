@@ -9,6 +9,9 @@ node_modules/
 /coverage
 
 
+/backend/src/main/resources/application.yml
+
+
 # production
 /build
 
