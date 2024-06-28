@@ -1,15 +1,9 @@
 package simple.blog.backend.exception;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +14,6 @@ import simple.blog.backend.dto.response.ResponseDTO;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ResponseDTO> handleUnwantedException(Exception e) {
 		ResponseDTO resp = ResponseDTO.builder().timestamp(LocalDateTime.now()).message(e.getMessage())
