@@ -12,8 +12,9 @@ import lombok.Setter;
 @Setter
 @Builder
 @Document("email_verification_tokens")
-public class EmailVerificationToken extends AbstractEntity {
+public class EmailVerificationToken {
 
+	 
 	 private String userEmail;
 	 private String token;
 	 private Date expiryDate;
