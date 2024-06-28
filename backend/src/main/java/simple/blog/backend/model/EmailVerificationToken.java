@@ -13,6 +13,7 @@ import lombok.Setter;
 @Document("email_verification_tokens")
 public class EmailVerificationToken {
 
+
 	private String userEmail;
 	private String token;
 	private Date expiryDate;

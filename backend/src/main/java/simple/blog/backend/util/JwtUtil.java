@@ -36,19 +36,19 @@ public class JwtUtil {
 	// use UserDetails instead of using our customer Users because
 	//  This makes JwtUtil flexible and 
 	// compatible with any class implementing UserDetails.
-    public String generateAccessToken(UserDetails userDetails){
+    public String generateAccessToken(String username){
         return Jwts.builder()
-                .subject(userDetails.getUsername())
+                .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION_TIME))
                 .signWith(key)
                 .compact();
     }
     
-    public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails){
+    public String generateRefreshToken(HashMap<String, Object> claims, String username){
         return Jwts.builder()
                 .claims(claims)
-                .subject(userDetails.getUsername())
+                .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
                 .signWith(key)
