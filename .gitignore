@@ -8,7 +8,7 @@ node_modules/
 # testing
 /coverage
 
-*/application.yml
+/backend/src/main/resources/application.yml
 
 # production
 /build
