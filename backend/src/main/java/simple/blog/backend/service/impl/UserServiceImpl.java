@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 		
 		userRepository.save(user);
 		
-		emailVerificationTokenService.sendConfirmationEmail(email);
+		emailVerificationTokenService.sendEmailConfirmation(email);
 		
 		return userMapper.toUserResponse(user);
 	}
