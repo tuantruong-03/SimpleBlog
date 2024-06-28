@@ -41,17 +41,17 @@ public class BackendApplication implements CommandLineRunner {
 			System.out.println(userRole);
 		}
 
-		if (userRepository.findByUsername("admin") != null) {
+		if (userRepository.findByUsername("admin") == null) {
 			Set<Role> roles = new HashSet<>();
 			roles.add(roleRepository.findByAuthority("ROLE_ADMIN"));
-			User admin = new User("admin", "123", "admin@gmail", roles);
+			User admin = new User("admin", "123", "admin@gmail","Im", "Admin", "", true, roles);
 			userRepository.save(admin);
 		}
-		if (userRepository.findByUserId(0) == null) {
+		if (userRepository.findByUserId(1) == null) {
 			for (int i = 0; i < 5; ++i) {
 				Set<Role> roles = new HashSet<>();
 				roles.add(roleRepository.findByAuthority("ROLE_USER"));
-				User user = new User("ASd", "base", "asdasd", roles);
+				User user = new User("user", "123", "user@gmail","Im", "User", "", true, roles);
 				userRepository.save(user);
 			}
 		}
