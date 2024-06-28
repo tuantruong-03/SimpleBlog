@@ -10,16 +10,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.mongodb.lang.NonNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Document("users")
-@Data
 @RequiredArgsConstructor
-public class User implements UserDetails  {
+@Getter
+@Setter
+public class User extends AbstractEntity implements UserDetails  {
     @Transient //this field is not persisted in the database
     public static final String SEQUENCE_NAME = "users_sequence";
 
@@ -32,6 +33,18 @@ public class User implements UserDetails  {
     private String password;
     @NonNull // For constructor
     private String email;
+    @NonNull
+    private String firstName;
+    @NonNull
+    private String lastName;
+    @NonNull
+    private String profilePicture;
+    @NonNull
+    private Boolean isEnabled;
+
+    private Status status;
+    
+
 
     @DBRef
     @NonNull // For constructor
@@ -40,5 +53,10 @@ public class User implements UserDetails  {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isEnabled;
     }
 }
