@@ -12,9 +12,9 @@ expiryDate.setTime(expiryDate.getTime() + (hours * 60 * 60 * 1000)); // Millisec
 
 
 // Initial state with authentication check
-const getToken = () => {
-    const token = Cookies.get('token');
-    return token ? token : null
+const getAccessToken = () => {
+    const accessToken = Cookies.get('accessToken');
+    return accessToken ? accessToken : null
 } 
 const getUser = () => {
     const userJson = Cookies.get('user');
@@ -27,9 +27,9 @@ const getUser = () => {
 };
 
 const authStateInit = {
-    isAuthenticated: !!getUser(),  // Checks if token is not null
+    isAuthenticated: !!getUser(),  // Checks if accessToken is not null
     user: getUser(),                     // Example state
-    token: getToken(),
+    accessToken: getAccessToken(),
     login: async (input: object) => Promise<any>,
     logout: () => {},
 };
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 
                 data: input
             });
-            // After fetch backend server, server response with Set-Cookie header (include token and user)
+            // After fetch backend server, server response with Set-Cookie header (include accessToken and user)
             if (response.status == 200) { // OK
                 setAuthState(prev => {
                     const userJson = Cookies.get('user');
@@ -70,10 +70,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                         ...prev,
                         isAuthenticated: true,
                         user: user,
-                        token: Cookies.get('token') || null,
+                        accessToken: Cookies.get('accessToken') || null,
                     };
                 });
-                // Cookies.set("token", data.token, {path: "/", expires: expiryDate})
+                // Cookies.set("accessToken", data.accessToken, {path: "/", expires: expiryDate})
                 // Cookies.set("user", JSON.stringify(data.user), {path: "/", expires: expiryDate})
                 navigate("/");
                 return null;
@@ -88,12 +88,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // Define logout function
     const logout = () => {
-        Cookies.remove("token", {path: '/'});
+        Cookies.remove("accessToken", {path: '/'});
         Cookies.remove("user", {path: '/'})
         setAuthState({
             isAuthenticated: false,
             user: null,
-            token: null,
+            accessToken: null,
             login,
             logout,
         });
