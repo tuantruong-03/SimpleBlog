@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import Login from './components/security/login';
 import Register from './components/security/register';
 import ProtectedRoute from './routes/protected-route';
-import Homepage from './components/security/homepage';
+import Homepage from './components/homepage';
 
 function App() {
   return (

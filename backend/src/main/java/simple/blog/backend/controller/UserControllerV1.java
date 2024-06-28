@@ -1,19 +1,16 @@
 package simple.blog.backend.controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import simple.blog.backend.dto.response.ResponseDTO;
-import simple.blog.backend.model.User;
 import simple.blog.backend.service.UserService;
 
 @RestController
