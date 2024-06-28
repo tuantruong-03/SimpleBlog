@@ -10,16 +10,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Document("users")
-@RequiredArgsConstructor
 @Getter
 @Setter
+@Builder
 public class User extends AbstractEntity implements UserDetails  {
     @Transient //this field is not persisted in the database
     public static final String SEQUENCE_NAME = "users_sequence";
@@ -44,7 +43,6 @@ public class User extends AbstractEntity implements UserDetails  {
 
     private Status status;
     
-
 
     @DBRef
     @NonNull // For constructor

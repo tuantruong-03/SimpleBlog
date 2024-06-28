@@ -1,2 +1,0 @@
-INDEX VERSION 1.4+D:\Java\our-realtime-chat-project\SimpleBlog\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-1965174767.index

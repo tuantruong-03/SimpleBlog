@@ -3,7 +3,7 @@ spring:
     name: backend
   data:
     mongodb:
-      uri: mongodb+srv://truonganhtuan3092:tuantruong131203@cluster0.hv8vca3.mongodb.net/simple_blog
+      uri: mongodb+srv://tayphuong1109:PhuongTay110903%40@javaphuongtay.qkqk0o3.mongodb.net/?retryWrites=true&w=majority&appName=JavaPhuongTay
       database: simple_blog
 # springdoc:
 #   api-docs:

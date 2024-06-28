@@ -11,28 +11,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
 import simple.blog.backend.dto.response.ResponseDTO;
 import simple.blog.backend.model.User;
 import simple.blog.backend.service.UserService;
 
-@RequestMapping("/api/v1/users")
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/users")
 public class UserControllerV1 {
-    private UserService userService;
-
-    public UserControllerV1(UserService userService) {
-        this.userService = userService;
-    }
+	
+    private final UserService userService;
     
     @GetMapping()
     public ResponseEntity<ResponseDTO> getUserList() {
-        ResponseDTO responseDTO = new ResponseDTO(LocalDateTime.now(), "Success", 200,userService.findAllUsers() );
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    	ResponseDTO resp = ResponseDTO.builder()
+    			.timestamp(LocalDateTime.now())
+    			.message("Get users list successfully")
+    			.statusCode(HttpStatus.OK.value())
+    			.data(userService.findAllUsers())
+    			.build();
+    	
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<ResponseDTO> getUserByUserId(@PathVariable Integer userId) {
-        ResponseDTO responseDTO = new ResponseDTO(LocalDateTime.now(),  "Success", 200, userService.findUserByUserId(userId));
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK); 
+    	ResponseDTO resp = ResponseDTO.builder()
+    			.timestamp(LocalDateTime.now())
+    			.message("Get user successfully")
+    			.statusCode(HttpStatus.OK.value())
+    			.data(userService.findUserByUserId(userId))
+    			.build();
+
+        return new ResponseEntity<>(resp, HttpStatus.OK); 
     }
 }
