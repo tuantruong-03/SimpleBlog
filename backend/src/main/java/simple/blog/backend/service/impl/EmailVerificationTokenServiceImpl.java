@@ -1,8 +1,10 @@
 package simple.blog.backend.service.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,11 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import simple.blog.backend.exception.AppException;
+import simple.blog.backend.model.EmailVerificationToken;
+import simple.blog.backend.model.User;
+import simple.blog.backend.repository.EmailVerificationTokenRepository;
+import simple.blog.backend.repository.UserRepository;
 import simple.blog.backend.service.EmailVerificationTokenService;
 
 @Service
@@ -17,10 +24,15 @@ import simple.blog.backend.service.EmailVerificationTokenService;
 public class EmailVerificationTokenServiceImpl implements EmailVerificationTokenService {
 
 	private final JavaMailSender javaMailSender;
+	private final EmailVerificationTokenRepository emailVerificationTokenRepository;
+	private final UserRepository userRepository;
 	
 	@Override
-	public void sendConfirmationEmail(String recipientEmail) throws UnsupportedEncodingException, MessagingException {
+	public void sendEmailConfirmation(String recipientEmail) throws UnsupportedEncodingException, MessagingException {
 	    String token = UUID.randomUUID().toString();
+	    
+	    EmailVerificationToken emailVerificationToken = new EmailVerificationToken(recipientEmail, token);
+	    emailVerificationTokenRepository.save(emailVerificationToken);
 	    
 	    MimeMessage message = javaMailSender.createMimeMessage();
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -43,6 +55,45 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 	    helper.setText(content, true);
 	    javaMailSender.send(message);
 	}
+	
+	@Override
+    public boolean isTokenExpired(EmailVerificationToken token) {
+        
+        Date expiryDate = token.getExpiryDate();
+        Date currentDate = new Date();
 
+        return currentDate.after(expiryDate);
+    }
 
+	@Override
+	public boolean confirmAccountRegistration(String token) throws UnsupportedEncodingException, MessagingException {
+		
+        EmailVerificationToken emailToken = emailVerificationTokenRepository.findByToken(token);
+        if (emailToken == null) {
+            throw new AppException("Token not found", HttpStatus.NOT_FOUND);
+        }
+        
+        User user = userRepository.findByEmail(emailToken.getUserEmail());
+        if (user == null) {
+            throw new AppException("User not found", HttpStatus.NOT_FOUND);
+        }
+
+		// if the token has not expired
+	    if (!isTokenExpired(emailToken)) {
+	        // activate user account
+	        user.setIsEnabled(true);
+	        userRepository.save(user);
+
+	        // Delete token from the database
+	        emailVerificationTokenRepository.delete(emailToken);
+	        return true;
+	    } 
+	    else {
+	    	// delete old token
+	    	emailVerificationTokenRepository.delete(emailToken);
+	    	// send new email
+	    	sendEmailConfirmation(user.getEmail());
+	    	return false;
+	    }
+	}
 }
