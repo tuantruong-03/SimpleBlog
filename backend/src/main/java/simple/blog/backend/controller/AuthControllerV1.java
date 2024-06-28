@@ -1,5 +1,6 @@
 package simple.blog.backend.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import simple.blog.backend.dto.request.UserRegistrationDTO;
@@ -24,8 +26,7 @@ public class AuthControllerV1 {
 	private final UserService userService;
 	
 	@PostMapping("/register") 
-	public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegistrationDTO requestBody) {
-		System.out.println("requestBody " + requestBody.toString());
+	public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegistrationDTO requestBody) throws UnsupportedEncodingException, MessagingException {
 		UserResponseDTO registeredUser = userService.register(requestBody);
     	ResponseDTO resp = ResponseDTO.builder()
     			.timestamp(LocalDateTime.now())

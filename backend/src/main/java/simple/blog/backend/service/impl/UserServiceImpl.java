@@ -1,6 +1,7 @@
 package simple.blog.backend.service.impl;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import simple.blog.backend.dto.request.UserRegistrationDTO;
 import simple.blog.backend.dto.response.UserResponseDTO;
@@ -21,6 +23,7 @@ import simple.blog.backend.model.Role;
 import simple.blog.backend.model.User;
 import simple.blog.backend.repository.RoleRepository;
 import simple.blog.backend.repository.UserRepository;
+import simple.blog.backend.service.EmailVerificationTokenService;
 import simple.blog.backend.service.UserService;
 
 @Service
@@ -31,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bcryptPasswordEncoder;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final EmailVerificationTokenService emailVerificationTokenService;
 
 
     @Override
@@ -60,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public UserResponseDTO register(UserRegistrationDTO request) {
+	public UserResponseDTO register(UserRegistrationDTO request) throws UnsupportedEncodingException, MessagingException {
 		
 		String username = request.getUsername();
 		String email = request.getEmail();
@@ -90,6 +94,8 @@ public class UserServiceImpl implements UserService {
 				.build();
 		
 		userRepository.save(user);
+		
+		emailVerificationTokenService.sendConfirmationEmail(email);
 		
 		return userMapper.toUserResponse(user);
 	}
