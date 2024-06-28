@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import simple.blog.backend.dto.request.UserRegistrationDTO;
 import simple.blog.backend.dto.response.ResponseDTO;
+import simple.blog.backend.dto.response.UserResponseDTO;
 import simple.blog.backend.service.UserService;
 
 @RestController
@@ -23,16 +24,16 @@ public class AuthControllerV1 {
 	private final UserService userService;
 	
 	@PostMapping("/register") 
-	public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegistrationDTO request) {
+	public ResponseEntity<ResponseDTO> register(@Valid @RequestBody UserRegistrationDTO requestBody) {
+		System.out.println("requestBody " + requestBody.toString());
+		UserResponseDTO registeredUser = userService.register(requestBody);
     	ResponseDTO resp = ResponseDTO.builder()
     			.timestamp(LocalDateTime.now())
     			.message("User created successfully")
     			.statusCode(HttpStatus.CREATED.value())
-    			.data(userService.register(request))
+    			.data(registeredUser)
     			.build();
 
         return new ResponseEntity<>(resp, HttpStatus.CREATED); 
 	}
-	
-
 }
