@@ -25,19 +25,15 @@ public class VerifyControllerV1 {
 	
 	@PostMapping("/confirm-account-registration")
 	public ResponseEntity<ResponseDTO> confirmAccountRegistration(@RequestBody String token) throws UnsupportedEncodingException, MessagingException {
-		
-		if(emailVerificationTokenService.confirmAccountRegistration(token)) {
-			ResponseDTO resp = ResponseDTO.builder()
-					.statusCode(200)
-					.message("Account is confirmed successfully")
-					.build();
-			return new ResponseEntity<>(resp, HttpStatus.OK);
-		}
+		boolean isVerified = emailVerificationTokenService.confirmAccountRegistration(token);
+		String message = isVerified ? "Account is confirmed successfully" : "Token expired. A new confirmation email has been sent.";
+		int statusCode = isVerified ? HttpStatus.OK.value() : HttpStatus.ACCEPTED.value();
+
 		ResponseDTO resp = ResponseDTO.builder()
-				.statusCode(HttpStatus.ACCEPTED.value())
-				.message("Token expired. A new confirmation email has been sent.")
+				.statusCode(statusCode)
+				.message(message)
 				.build();
-		return new ResponseEntity<>(resp, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(resp, HttpStatus.valueOf(statusCode));
 		
 	}
 
