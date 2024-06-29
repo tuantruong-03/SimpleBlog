@@ -69,15 +69,16 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 	public boolean confirmAccountRegistration(String token) throws UnsupportedEncodingException, MessagingException {
 		
         EmailVerificationToken emailToken = emailVerificationTokenRepository.findByToken(token);
-        if (emailToken == null) {
-            throw new AppException("Token not found", HttpStatus.NOT_FOUND);
+        
+        if (emailToken.getToken() == null) {
+            throw new AppException("Email token not found", HttpStatus.NOT_FOUND);
         }
         
         User user = userRepository.findByEmail(emailToken.getUserEmail());
         if (user == null) {
             throw new AppException("User not found", HttpStatus.NOT_FOUND);
         }
-
+        
 		// if the token has not expired
 	    if (!isTokenExpired(emailToken)) {
 	        // activate user account
@@ -85,12 +86,12 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 	        userRepository.save(user);
 
 	        // Delete token from the database
-	        emailVerificationTokenRepository.delete(emailToken);
+	        emailVerificationTokenRepository.deleteByUserEmail(user.getEmail());
 	        return true;
 	    } 
 	    else {
 	    	// delete old token
-	    	emailVerificationTokenRepository.delete(emailToken);
+	    	emailVerificationTokenRepository.deleteByUserEmail(user.getEmail());
 	    	// send new email
 	    	sendEmailConfirmation(user.getEmail());
 	    	return false;

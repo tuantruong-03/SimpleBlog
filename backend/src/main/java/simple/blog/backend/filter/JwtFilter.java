@@ -31,7 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	private final UserService userService;
 	private final RefreshTokenService refreshTokenService;
 
-	private static final Set<String> EXCLUDE_URL_PATTERNS = Stream.of("/api/v1/auth/", "/public/")
+	private static final Set<String> EXCLUDE_URL_PATTERNS = Stream.of("/api/v1/auth/", "/api/v1/verify/", "/public/")
 			.collect(Collectors.toSet());
 
 	private String resolveToken(@NonNull HttpServletRequest request) {
