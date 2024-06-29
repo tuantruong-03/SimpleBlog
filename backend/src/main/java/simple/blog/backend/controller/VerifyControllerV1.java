@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import simple.blog.backend.dto.request.EmailTokenRequestDTO;
 import simple.blog.backend.dto.response.ResponseDTO;
 import simple.blog.backend.service.EmailVerificationTokenService;
 
@@ -24,8 +25,8 @@ public class VerifyControllerV1 {
 	
 	
 	@PostMapping("/confirm-account-registration")
-	public ResponseEntity<ResponseDTO> confirmAccountRegistration(@RequestBody String token) throws UnsupportedEncodingException, MessagingException {
-		boolean isVerified = emailVerificationTokenService.confirmAccountRegistration(token);
+	public ResponseEntity<ResponseDTO> confirmAccountRegistration(@RequestBody EmailTokenRequestDTO tokenDTO) throws UnsupportedEncodingException, MessagingException {
+		boolean isVerified = emailVerificationTokenService.confirmAccountRegistration(tokenDTO.getToken());
 		String message = isVerified ? "Account is confirmed successfully" : "Token expired. A new confirmation email has been sent.";
 		int statusCode = isVerified ? HttpStatus.OK.value() : HttpStatus.ACCEPTED.value();
 
