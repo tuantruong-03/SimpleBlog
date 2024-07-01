@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
@@ -31,7 +31,7 @@ import simple.blog.backend.service.UserService;
 public class UserServiceImpl implements UserService {
 	
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bcryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final EmailVerificationTokenService emailVerificationTokenService;
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 			throw new AppException("User with email " +  email + " existed", HttpStatus.CONFLICT);
 		}
 		
-		String encodedPassword = bcryptPasswordEncoder.encode(request.getPassword());
+		String encodedPassword = passwordEncoder.encode(request.getPassword());
 		Set<Role> roles = new HashSet<>();
 		roles.add(roleRepository.findByAuthority("ROLE_USER"));
 		
