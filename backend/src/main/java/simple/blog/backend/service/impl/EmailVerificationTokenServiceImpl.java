@@ -3,10 +3,12 @@ package simple.blog.backend.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
@@ -27,8 +29,9 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 	private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 	private final UserRepository userRepository;
 	
+	@Async
 	@Override
-	public void sendEmailConfirmation(String recipientEmail) throws UnsupportedEncodingException, MessagingException {
+	public CompletableFuture<Void> sendEmailConfirmation(String recipientEmail) throws UnsupportedEncodingException, MessagingException {
 	    String token = UUID.randomUUID().toString();
 	    
 	    EmailVerificationToken emailVerificationToken = new EmailVerificationToken(recipientEmail, token);
@@ -54,6 +57,7 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 
 	    helper.setText(content, true);
 	    javaMailSender.send(message);
+		return CompletableFuture.completedFuture(null);
 	}
 	
 	@Override
